@@ -1,0 +1,382 @@
+C51 COMPILER V9.54   IOT1_LED                                                              08/21/2017 11:34:01 PAGE 1   
+
+
+C51 COMPILER V9.54, COMPILATION OF MODULE IOT1_LED
+OBJECT MODULE PLACED IN .\Objects\IOT1_LED.obj
+COMPILER INVOKED BY: D:\Keil\Software\C51\BIN\C51.EXE IOT1_LED.c OMF2 OPTIMIZE(8,SPEED) BROWSE DEBUG PRINT(.\Listings\IO
+                    -T1_LED.lst) TABS(2) OBJECT(.\Objects\IOT1_LED.obj)
+
+line level    source
+
+   1          /********************************************************************************
+   2          *°æÈ¨ËùÓÐ (C)2017ÉîÛÚ¹úÌ©°²½ÌÓý¼¼Êõ¹É·ÝÓÐÏÞ¹«Ë¾
+   3          *-------------------------------------------------------------------------------
+   4          * ±àÒë»·¾³: Keil uVision5
+   5          * Ó²¼þ»·¾³: GTA-GPMA12CA-V1.0 + GTA-GECA11CA-V1.0
+   6          * ÎÄ¼þËµÃ÷£ºÍ¨¹ý´®¿ÚÖúÊÖ·¢ËÍ£¬
+   7          * ³õÊ¼°æ±¾£ºÖÇÄÜ¼Ò¾ÓÊµÑé_LED¿ØÖÆV1.0
+   8          * ×÷    Õß£ºµç×ÓÉè¼Æ²¿
+   9          * Íê³ÉÈÕÆÚ£º2017Äê8ÔÂ
+  10          *-------------------------------------------------------------------------------
+  11          *---------------------------------ÊµÑé±Ø¶Á--------------------------------------
+  12          *     ±¾ÊµÑé¿ªÊ¼Ç°±ØÐë¸ü¸Ä³ÌÐò´úÂëµÚ253ÐÐÉè¶¨WIFIµÄSSID£¨¼´WIFIÈÈµãÃû³Æ£©±ØÐëÉè
+  13          * ¶¨³É¹æ¶¨µÄÃû³Æ£¬ÆäËû²ÎÊý½ûÖ¹¸ü¸Ä£¬·ñÔòµ¼ÖÂÊÖ»úAPPÎÞ·¨Ê¶±ð£¬ÊµÑé½«³ö´í£¬¸ü¸ÄÍê
+  14          * ³ÉºóÖØÐÂ±àÒëÉú³É.hexÎÄ¼þ²¢ÉÕÐ´½øµ¥Æ¬»ú£»
+  15          * 
+  16          * Ê¾Àý£º
+  17          * 
+  18          * ÊµÑéÏä3   SSIDÉè¶¨ÎªGTAWJ_WX_02_003£»
+  19          * ÊµÑéÏä10  SSIDÉè¶¨ÎªGTAWJ_WX_02_010£»
+  20          * ÊµÑéÏä16  SSIDÉè¶¨ÎªGTAWJ_WX_02_016£»
+  21          * 
+  22          * ...ÒÔ´ËÀàÍÆ
+  23          *
+  24          *-------------------------------------------------------------------------------
+  25          *---------------------------------ÐÞ¸Ä¼ÇÂ¼--------------------------------------
+  26          * ÐÞ¸Ä¼ÇÂ¼1£º
+  27          * ÐÞ¸ÄÈÕÆÚ £º
+  28          * °æ ±¾ ºÅ £º
+  29          * ÐÞ ¸Ä ÈË £º
+  30          * ÐÞ¸ÄÄÚÈÝ £º
+  31          *
+  32          * ÐÞ¸Ä¼ÇÂ¼2:
+  33          *-------------------------------------------------------------------------------
+  34          ********************************************************************************/
+  35          
+  36          #include <reg52.h>
+  37          #include "string.h"
+  38          
+  39          #define uchar           unsigned char
+  40          #define uint            unsigned int
+  41          #define CACHE           buffer[0]
+  42          #define CMDFLG_RESET    COMMAND_FLAG = 0
+  43          
+  44          #define RX_MAXSIZE      30            //Ö¸Áî³¤¶È
+  45          #define COMMAND_SIZE    5             //Ö¸Áî¸öÊý
+  46          #define BUFFER_CORTEX   3             //¿ª·ÅÖ¸Áî²ã¼¶
+  47          
+  48          uchar idata buffer[COMMAND_SIZE][RX_MAXSIZE] = {              //´®¿Ú»º³å¶ÓÁÐ
+  49          
+  50            "a","b","c","d","e"
+  51          };    
+  52          
+  53          volatile uchar idata COMMAND_FLAG = 255;                      //Ö¸ÁîÊ¶±ð±êÊ¶
+  54          volatile uchar idata counter = 0;                                   
+C51 COMPILER V9.54   IOT1_LED                                                              08/21/2017 11:34:01 PAGE 2   
+
+  55          
+  56          bit trans_flg;
+  57          
+  58          code const uchar *command[COMMAND_SIZE] = {                   //Ö¸Áî²éÕÒ±í
+  59            
+  60            "Erase","0,CONNECT","0,CLOSED","ERROR","default5"
+  61          };
+  62          
+  63          void init(void)                                               //´®¿Ú³õÊ¼»¯  ²¨ÌØÂÊ9600
+  64          {
+  65   1        SCON = 0x50;
+  66   1        TMOD |= 0x20;
+  67   1        PCON |= 0x80;
+  68   1        TH1 = 0xfa;
+  69   1        TR1  = 1;
+  70   1        REN  = 1;
+  71   1        SM0  = 0;
+  72   1        SM1  = 1;
+  73   1        EA   = 1;
+  74   1        ES   = 1;
+  75   1        PS   = 1;
+  76   1      }
+  77          
+  78          void delay(uint xms)                                          //ºÁÃëÑÓÊ±
+  79          {
+  80   1        uint j;
+  81   1        for(;xms>0;xms--)
+  82   1        for(j=110;j>0;j--);
+  83   1      }
+  84          
+  85          void put_char(uchar chr)                                      //´®¿Úµ¥×Ö·û·¢ËÍ
+  86          { 
+  87   1        ES = 0;
+  88   1        
+  89   1        SBUF = chr;
+  90   1        while(!TI);
+  91   1        TI = 0;
+  92   1        
+  93   1        ES = 1;
+  94   1      } 
+  95          
+  96          static void print_string(uchar *str)                          //´®¿Ú×Ö·û´®·¢ËÍ
+  97          {
+  98   1        while(*str){
+  99   2          
+ 100   2          put_char(*str);
+ 101   2          str++;
+ 102   2        }
+ 103   1        put_char('\r');
+ 104   1        put_char('\n');
+ 105   1      }
+ 106            
+ 107          void USART() interrupt 4                                      //´®¿ÚÖÐ¶Ï½ÓÊÕ´¦Àí
+ 108          {
+ 109   1         
+ 110   1          uchar loop;
+ 111   1        
+ 112   1          if(RI)
+ 113   1          {
+ 114   2              RI = 0;
+ 115   2             
+ 116   2              if(SBUF == 0x0d){                                     //\rÊ¶±ð´®Î²¿ªÊ¼Ö¸ÁîÊ¶±ð
+C51 COMPILER V9.54   IOT1_LED                                                              08/21/2017 11:34:01 PAGE 3   
+
+ 117   3                for(loop=0;loop<COMMAND_SIZE;loop++)        
+ 118   3                if(!strcmp(buffer[0],command[loop])){
+ 119   4                    trans_flg = 1;
+ 120   4                    COMMAND_FLAG = loop;
+ 121   4                    break;
+ 122   4                }
+ 123   3              }     
+ 124   2              
+ 125   2              else
+ 126   2                
+ 127   2              if(SBUF != 0x0a){                                     //\nÊ¶±ðÖ¸Áî½áÊø£¬·â×°×Ö·û´®ËÍÈë»º³å¶ÓÁÐ
+ 128   3                if(!counter){ 
+ 129   4                  
+ 130   4                   if(BUFFER_CORTEX-1)
+ 131   4                     for(loop = 1;loop < BUFFER_CORTEX;loop ++)
+ 132   4                        strcpy(buffer[BUFFER_CORTEX-loop],buffer[BUFFER_CORTEX-loop-1]);
+ 133   4      
+ 134   4                   memset(buffer[0],0,sizeof(uchar)*RX_MAXSIZE);           
+ 135   4                }
+ 136   3                buffer[0][counter++] = SBUF;
+ 137   3                if(counter > RX_MAXSIZE-2)counter = 0;              //»º´æ²»×ã£¬´ÓÍ·¿ªÊ¼
+ 138   3              }else counter = 0;
+ 139   2          }     
+ 140   1      }
+ 141          
+ 142          
+ 143          /********************************************
+ 144            ÊäÈë£º    command£º ÐèÒªÊäÈëµÄATÖ¸Áî
+ 145                          rec:  ¶ÔÓ¦ESP8266 ATÖ¸ÁîÏìÓ¦
+ 146                    wait_time:  µ¥´ÎÊäÈëµÈ´ýÊ±¼ä
+ 147                          rep£º Ö¸ÁîÖØ¸´´ÎÊý
+ 148          
+ 149          ·µ»ØÖµ£ºÖ¸Áî»ñµÃÕýÈ·ÏìÓ¦·µ»Ø0£¬·ñÔò·µ»Ø1
+ 150          *********************************************/
+ 151          bit ATTX_M1(uchar *command,uchar *rec,uint wait_time,uchar rep)
+ 152          {
+ 153   1          uchar time_point = 1;
+ 154   1        
+ 155   1          delay(100);
+ 156   1          while(strcmp(rec,buffer[0])){
+ 157   2          
+ 158   2              print_string(command);
+ 159   2              delay(wait_time);
+ 160   2              time_point++;
+ 161   2              if(time_point > rep)return 1;
+ 162   2          }
+ 163   1          strcpy(buffer[0],"Erase");
+ 164   1          delay(100);
+ 165   1          return 0;
+ 166   1      }
+ 167          
+ 168          /********************************************
+ 169            ÊäÈë£º    command£º ÐèÒªÊäÈëµÄATÖ¸Áî
+ 170                          rec:  ¶ÔÓ¦ESP8266 ATÖ¸ÁîÏìÓ¦
+ 171                    over_time:  ³¬Ê±Ê±³¤
+ 172          
+ 173          ·µ»ØÖµ£ºÖ¸Áî»ñµÃÕýÈ·ÏìÓ¦·µ»Ø0£¬·ñÔò·µ»Ø1
+ 174          *********************************************/    
+ 175          bit ATTX_M2(uchar *command,uchar *rec,uint over_time)
+ 176          {
+ 177   1          
+ 178   1          uint time_point = 1;
+C51 COMPILER V9.54   IOT1_LED                                                              08/21/2017 11:34:01 PAGE 4   
+
+ 179   1        
+ 180   1          delay(100);
+ 181   1          print_string(command);
+ 182   1          while(strcmp(rec,buffer[0])){
+ 183   2            
+ 184   2              delay(200);
+ 185   2              if(time_point > over_time/200)return 1;
+ 186   2              time_point++;
+ 187   2          }
+ 188   1          strcpy(buffer[0],"Erase");
+ 189   1          delay(100);
+ 190   1          return 0;
+ 191   1      }
+ 192          
+ 193          /********************************************
+ 194          ´®¿ÚÊ¶±ð²âÊÔ
+ 195          *********************************************/  
+ 196          void usart_test(void)
+ 197          {
+ 198   1        uchar *p;
+ 199   1        init();
+ 200   1        while(1){
+ 201   2          
+ 202   2            put_char('1'+COMMAND_FLAG);
+ 203   2            print_string("\r\n");
+ 204   2            p = strtok(buffer[0],":");
+ 205   2            p = strtok(NULL,":");
+ 206   2            print_string(p);
+ 207   2            print_string("\r\n");
+ 208   2            print_string(buffer[1]);
+ 209   2            print_string("\r\n");
+ 210   2            print_string(buffer[2]);
+ 211   2            print_string("\r\n");
+ 212   2            delay(1000);
+ 213   2        }   
+ 214   1      }
+ 215          
+ 216          /********************************************
+ 217          ´®¿ÚÊ¶±ð²âÊÔ
+ 218          *********************************************/  
+ 219          void my_test(void)
+ 220          {
+ 221   1      
+ 222   1        init();
+ 223   1        
+ 224   1      //  ATTX_M2("ÄãÊÇË­£¿","ÎÒ¾ÍÊÇÎÒ",65535);
+ 225   1      //  ATTX_M2("Äã´ÓÄÄÀ´£¿","ÎÒ´ÓÀ´´¦À´",65535);
+ 226   1      //  ATTX_M2("Äãµ½ÄÄÈ¥£¿","ÎÒµ½È¥´¦È¥",65535);
+ 227   1        
+ 228   1        ATTX_M1("ÄãÊÇË­£¿","ÎÒ¾ÍÊÇÎÒ",1000,100);
+ 229   1        ATTX_M1("Äã´ÓÄÄÀ´£¿","ÎÒ´ÓÀ´´¦À´",1000,100);
+ 230   1        ATTX_M1("Äãµ½ÄÄÈ¥£¿","ÎÒµ½È¥´¦È¥",1000,100);
+ 231   1        usart_test();
+ 232   1      }
+ 233          
+ 234          /********************************************
+ 235          ESP8266²ÎÊýÉè¶¨
+ 236          *********************************************/  
+ 237          void Wifi_Reset(void)
+ 238          {
+ 239   1        origin:                                                                                                    //Í¨¹ý´®¿ÚÏòESP8266·¢ËÍÉè¶¨Ö¸Áî£¬Ö¸ÁîÎ´»ñµÃÕýÈ·
+             -ÏìÓ¦Ôò·µ»Ø´Ë´¦ÖØÐÂÉè¶¨
+C51 COMPILER V9.54   IOT1_LED                                                              08/21/2017 11:34:01 PAGE 5   
+
+ 240   1        P0 = 0xff;
+ 241   1        delay(500);
+ 242   1        if(ATTX_M2("AT+RST","ready",2000))                                                            goto origin;
+ 243   1        P0 = 0xfe;
+ 244   1        delay(500);
+ 245   1        if(ATTX_M1("ATE0","OK",200,10))                                                               goto origin; //¹Ø±ÕÖ¸Áî»Ø·¢ 
+ 246   1        P0 = 0xfc;                                                                                                 //½ø³ÌÖ¸Ê¾
+ 247   1        if(ATTX_M1("AT","OK",200,10))                                                                 goto origin; //È·ÈÏ×´Ì¬
+ 248   1        P0 = 0xf8;                                                                                                 //½ø³ÌÖ¸Ê¾
+ 249   1        if(ATTX_M1("AT+CWMODE=2","OK",200,10))                                                        goto origin; //Éè¶¨ESP8266 ÎªAPÄ£Ê½
+ 250   1        P0 = 0xf0;                                                                                                 //½ø³ÌÖ¸Ê¾
+ 251   1        if(ATTX_M1("AT+CIPAP=\"192.168.1.1\"","OK",200,10))                                           goto origin; //Éè¶¨ESP8266 AP¶ÔÓ
+             -¦IPµØÖ·
+ 252   1        P0 = 0xe0;                                                                                                 //½ø³ÌÖ¸Ê¾
+ 253   1        if(ATTX_M1("AT+CWSAP_CUR=\"GTAWJ_WX_02_001\",\"1234567890\",5,3,2,0","OK",600,10))            goto origin; //Éè
+             -¶¨ESP8266 SSID¼°PASSWORD
+ 254   1        P0 = 0xc0;                                                                                                 //½ø³ÌÖ¸Ê¾
+ 255   1        if(ATTX_M1("AT+CIPMUX=1","OK",200,10))                                                        goto origin; //Éè¶¨ESP8266 ¶àÏßÁ¬½ÓÄ£Ê½
+ 256   1        P0 = 0x80;                                                                                                 //½ø³ÌÖ¸Ê¾
+ 257   1        if(ATTX_M1("AT+CIPSERVER=1,8888","OK",200,10))                                                goto origin; //Éè¶¨ESP8266 ¿ªÆôserv
+             -er¼°¶ÔÓ¦¶Ë¿ÚºÅ
+ 258   1        P0 = 0x00;                                                                                                 //½ø³ÌÖ¸Ê¾
+ 259   1        delay(1000);
+ 260   1      }
+ 261          
+ 262          void Thread_M(void)         //Ö÷Ïß³Ì
+ 263          {
+ 264   1        uchar idata *p;           //ÉèÖÃ»º³å
+ 265   1        uchar error_count,keep;   //»ñÈ¡´íÎóÏìÓ¦¼ÆÊý
+ 266   1        error_count = keep = 0;
+ 267   1        
+ 268   1        P0 = 0xaa;
+ 269   1        CMDFLG_RESET;             //Ö¸ÁîÊ¶±ð±íÊ¾¸´Î»
+ 270   1        strcpy(CACHE,"Erase");    //²Á³ý´®¿Ú»º´æ£¬ÓÃÎÞ¹Ø×ÖÌî³ä
+ 271   1        wait_for_connect:while(COMMAND_FLAG != 1){delay(200);P0 = ~P0;}   //µÈ´ýÊÖ»úÁ¬½Ó
+ 272   1        delay(300);
+ 273   1        print_string("AT+CIPSEND=0,1");       //ÊÖ»úÒÑÁ¬½Ó£¬»Ø¸´ÊÖ»úÁ¬½Ó±ê¼Ç0xff
+ 274   1        delay(200);
+ 275   1        put_char('A');
+ 276   1        
+ 277   1        while(strcmp("+IPD,0,3:A",CACHE)){    //ÊÖ»ú»Ø¸´'A'±íÊ¾¿ØÖÆÁ÷Ë®µÆ£¬ÊÖ»ú»Ø¸´'B'±íÊ¾¿ØÖÆ´°Á±
+ 278   2        
+ 279   2          delay(200);P0 = ~P0;
+ 280   2          if(COMMAND_FLAG == 2)goto wait_for_connect;
+ 281   2        }     
+ 282   1      
+ 283   1        P0 = 0;  delay(100);
+ 284   1        P0 = ~P0;delay(100);
+ 285   1        P0 = ~P0;delay(100);
+ 286   1        P0 = ~P0;delay(100);
+ 287   1        P0 = ~P0;delay(100);
+ 288   1        P0 = ~P0;delay(100);
+ 289   1        P0 = ~P0;delay(100);
+ 290   1        P0 = ~P0;
+ 291   1      
+ 292   1        memset(buffer[0],0,sizeof(uchar)*RX_MAXSIZE);       //²Á³ý´®¿Ú»º´æ
+ 293   1        while(1){
+ 294   2        
+ 295   2          if(COMMAND_FLAG == 2 || error_count > 5)break;    //ÈôESP8266ÏìÓ¦ÊÖ»úÊ§Áª£¨ÊÖ»úÖ÷¶¯¶Ï¿ªÁ¬½Ó£©»òÕß»ñµÃ´íÎóÏ
+             -ìÓ¦´ÎÊý´ïµ½5´ÎÔòÖØÐÂÉè¶¨ESP8266
+ 296   2          if(COMMAND_FLAG == 3){                            //»ñµÃESP8266´íÎóÏìÓ¦£¬´íÎó¼ÆÊý£¬Í¬Ê±²Á³ý´®¿Ú»º´æ
+ 297   3            
+C51 COMPILER V9.54   IOT1_LED                                                              08/21/2017 11:34:01 PAGE 6   
+
+ 298   3              error_count++;
+ 299   3              memset(buffer[0],0,sizeof(uchar)*RX_MAXSIZE);
+ 300   3              CMDFLG_RESET;
+ 301   3          }
+ 302   2          if(strlen(CACHE) < 11 && strlen(CACHE) > 8)       //»ñµÃÊÖ»ú·¢ËÍÍ¬Ê±±»ESP8266´¦Àí¹ýµÄÊý¾Ý°ü£¬¶ÔÆä³¤¶È½øÐÐÈ·
+             -ÈÏ£¬±ÜÃâ¶ª°ü
+ 303   2          if(!strcmp("+IPD",strtok(CACHE,","))){            //½âÎöÊý¾Ý£¬»ñµÃÖ¸Áî£¬½ØÈ¡×Ö·û´®"+IPD,0,1:"ºóµÄÊý¾ÝÈ»ºó¶ÔLED
+             -½øÐÐ¶ÔÓ¦²Ù×÷
+ 304   3          
+ 305   3              p = strtok(NULL,":");
+ 306   3              p = strtok(NULL,":");
+ 307   3              P0 = ~(*p);                                   //¸ù¾Ý¿Í»§¶Ë¼àÌý°´Å¥»ñµÃÖµ¿ØÖÆ8¿ÅLED
+ 308   3              strcpy(CACHE,"Erase");
+ 309   3              CMDFLG_RESET;
+ 310   3              delay(50);
+ 311   3          }
+ 312   2          delay(50);
+ 313   2          keep ++;
+ 314   2          
+ 315   2          if(keep > 100){
+ 316   3          
+ 317   3              if(!ATTX_M2("AT+CIPSEND=0,1","ERROR",200))break;
+ 318   3              put_char(0xff);
+ 319   3              keep = 0;
+ 320   3          }
+ 321   2        }
+ 322   1        P0 = 0xff;                                          //Èô½ø³Ì½áÊø£¬Ôò¹Ø±ÕËùÓÐLED
+ 323   1        print_string("i'm out");
+ 324   1      }
+ 325          
+ 326          void user_task(void)
+ 327          {
+ 328   1        init();
+ 329   1        
+ 330   1        Wifi_Reset();
+ 331   1        Thread_M();
+ 332   1      }
+ 333          
+ 334          void main(void)
+ 335          {
+ 336   1        user_task();
+ 337   1      }
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =   1394    ----
+   CONSTANT SIZE    =    306    ----
+   XDATA SIZE       =   ----    ----
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =   ----      26
+   IDATA SIZE       =    152    ----
+   BIT SIZE         =      1    ----
+   EDATA SIZE       =   ----    ----
+   HDATA SIZE       =   ----    ----
+   XDATA CONST SIZE =   ----    ----
+   FAR CONST SIZE   =   ----    ----
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)

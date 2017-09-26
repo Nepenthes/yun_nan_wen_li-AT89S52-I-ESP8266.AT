@@ -1,0 +1,515 @@
+BL51 BANKED LINKER/LOCATER V6.22                                                        08/18/2017  14:28:25  PAGE 1
+
+
+BL51 BANKED LINKER/LOCATER V6.22, INVOKED BY:
+D:\KEIL\SOFTWARE\C51\BIN\BL51.EXE .\Objects\IOT1_LED.obj TO .\Objects\IOT_1_LED PRINT (.\Listings\IOT_1_LED.m51) RAMSIZE
+>>  (256)
+
+
+MEMORY MODEL: SMALL
+
+
+INPUT MODULES INCLUDED:
+  .\Objects\IOT1_LED.obj (IOT1_LED)
+  D:\KEIL\SOFTWARE\C51\LIB\C51S.LIB (?C_STARTUP)
+  D:\KEIL\SOFTWARE\C51\LIB\C51S.LIB (?C?CLDPTR)
+  D:\KEIL\SOFTWARE\C51\LIB\C51S.LIB (?C?UIDIV)
+  D:\KEIL\SOFTWARE\C51\LIB\C51S.LIB (?C?STRCMP)
+  D:\KEIL\SOFTWARE\C51\LIB\C51S.LIB (?C?STRCPY)
+  D:\KEIL\SOFTWARE\C51\LIB\C51S.LIB (STRLEN)
+  D:\KEIL\SOFTWARE\C51\LIB\C51S.LIB (STRTOK)
+  D:\KEIL\SOFTWARE\C51\LIB\C51S.LIB (?C?MEMSET)
+  D:\KEIL\SOFTWARE\C51\LIB\C51S.LIB (?C_INIT)
+  D:\KEIL\SOFTWARE\C51\LIB\C51S.LIB (?C?CSTPTR)
+  D:\KEIL\SOFTWARE\C51\LIB\C51S.LIB (STRSPN)
+  D:\KEIL\SOFTWARE\C51\LIB\C51S.LIB (STRPBRK)
+  D:\KEIL\SOFTWARE\C51\LIB\C51S.LIB (?C?CLDOPTR)
+
+
+LINK MAP OF MODULE:  .\Objects\IOT_1_LED (IOT1_LED)
+
+
+            TYPE    BASE      LENGTH    RELOCATION   SEGMENT NAME
+            -----------------------------------------------------
+
+            * * * * * * *   D A T A   M E M O R Y   * * * * * * *
+            REG     0000H     0008H     ABSOLUTE     "REG BANK 0"
+            DATA    0008H     0012H     UNIT         _DATA_GROUP_
+            DATA    001AH     0003H     UNIT         ?DT?USART_TEST?IOT1_LED
+            DATA    001DH     0003H     UNIT         ?DT?STRTOK
+            BIT     0020H.0   0000H.1   UNIT         ?BI?IOT1_LED
+                    0020H.1   0000H.7                *** GAP ***
+            IDATA   0021H     0098H     UNIT         ?ID?IOT1_LED
+            IDATA   00B9H     0001H     UNIT         ?STACK
+
+            * * * * * * *   C O D E   M E M O R Y   * * * * * * *
+            CODE    0000H     0003H     ABSOLUTE     
+            CODE    0003H     001BH     UNIT         ?PR?INIT?IOT1_LED
+            CODE    001EH     0003H     UNIT         ?PR?MAIN?IOT1_LED
+                    0021H     0002H                  *** GAP ***
+            CODE    0023H     0003H     ABSOLUTE     
+            CODE    0026H     035DH     UNIT         ?C?LIB_CODE
+            CODE    0383H     015EH     UNIT         ?PR?THREAD_M?IOT1_LED
+            CODE    04E1H     0121H     UNIT         ?CO?IOT1_LED
+            CODE    0602H     0110H     UNIT         ?PR?WIFI_RESET?IOT1_LED
+            CODE    0712H     00DCH     UNIT         ?PR?USART?IOT1_LED
+            CODE    07EEH     00A0H     UNIT         ?C_INITSEG
+            CODE    088EH     008CH     UNIT         ?C_C51STARTUP
+            CODE    091AH     0080H     UNIT         ?PR?_STRTOK?STRTOK
+            CODE    099AH     0061H     UNIT         ?PR?_STRSPN?STRSPN
+            CODE    09FBH     005DH     UNIT         ?PR?_STRPBRK?STRPBRK
+            CODE    0A58H     0058H     UNIT         ?PR?USART_TEST?IOT1_LED
+BL51 BANKED LINKER/LOCATER V6.22                                                      08/18/2017  14:28:25  PAGE 2
+
+
+            CODE    0AB0H     0057H     UNIT         ?PR?MY_TEST?IOT1_LED
+            CODE    0B07H     004DH     UNIT         ?PR?_ATTX_M1?IOT1_LED
+            CODE    0B54H     004BH     UNIT         ?PR?_ATTX_M2?IOT1_LED
+            CODE    0B9FH     0039H     UNIT         ?PR?_DELAY?IOT1_LED
+            CODE    0BD8H     0027H     UNIT         ?PR?_PRINT_STRING?IOT1_LED
+            CODE    0BFFH     0015H     UNIT         ?PR?_STRLEN?STRLEN
+            CODE    0C14H     000CH     UNIT         ?PR?_PUT_CHAR?IOT1_LED
+            CODE    0C20H     0009H     UNIT         ?PR?USER_TASK?IOT1_LED
+
+
+
+OVERLAY MAP OF MODULE:   .\Objects\IOT_1_LED (IOT1_LED)
+
+
+SEGMENT                              DATA_GROUP 
+  +--> CALLED SEGMENT              START    LENGTH
+--------------------------------------------------
+?PR?USART?IOT1_LED                 0008H    0001H
+  +--> ?CO?IOT1_LED
+
+*** NEW ROOT ***************************************************
+
+?C_C51STARTUP                      -----    -----
+  +--> ?PR?MAIN?IOT1_LED
+  +--> ?C_INITSEG
+
+?PR?MAIN?IOT1_LED                  -----    -----
+  +--> ?PR?USER_TASK?IOT1_LED
+
+?PR?USER_TASK?IOT1_LED             -----    -----
+  +--> ?PR?INIT?IOT1_LED
+  +--> ?PR?WIFI_RESET?IOT1_LED
+  +--> ?PR?THREAD_M?IOT1_LED
+
+?PR?WIFI_RESET?IOT1_LED            -----    -----
+  +--> ?PR?_DELAY?IOT1_LED
+  +--> ?CO?IOT1_LED
+  +--> ?PR?_PRINT_STRING?IOT1_LED
+  +--> ?PR?INIT?IOT1_LED
+  +--> ?PR?_ATTX_M1?IOT1_LED
+
+?PR?_PRINT_STRING?IOT1_LED         -----    -----
+  +--> ?CO?IOT1_LED
+  +--> ?PR?_PUT_CHAR?IOT1_LED
+
+?PR?_ATTX_M1?IOT1_LED              0009H    000AH
+  +--> ?PR?_DELAY?IOT1_LED
+  +--> ?PR?_PRINT_STRING?IOT1_LED
+  +--> ?CO?IOT1_LED
+
+?PR?THREAD_M?IOT1_LED              0009H    0002H
+  +--> ?CO?IOT1_LED
+  +--> ?PR?_DELAY?IOT1_LED
+  +--> ?PR?_PRINT_STRING?IOT1_LED
+  +--> ?PR?_PUT_CHAR?IOT1_LED
+  +--> ?PR?_STRLEN?STRLEN
+  +--> ?PR?_STRTOK?STRTOK
+BL51 BANKED LINKER/LOCATER V6.22                                                      08/18/2017  14:28:25  PAGE 3
+
+
+  +--> ?PR?_ATTX_M2?IOT1_LED
+
+?PR?_STRTOK?STRTOK                 000BH    0006H
+  +--> ?PR?_STRSPN?STRSPN
+  +--> ?PR?_STRPBRK?STRPBRK
+
+?PR?_STRSPN?STRSPN                 0011H    0008H
+
+?PR?_STRPBRK?STRPBRK               0011H    0009H
+
+?PR?_ATTX_M2?IOT1_LED              000BH    0009H
+  +--> ?PR?_DELAY?IOT1_LED
+  +--> ?PR?_PRINT_STRING?IOT1_LED
+  +--> ?CO?IOT1_LED
+
+
+
+SYMBOL TABLE OF MODULE:  .\Objects\IOT_1_LED (IOT1_LED)
+
+  VALUE           TYPE          NAME
+  ----------------------------------
+
+  -------         MODULE        IOT1_LED
+  C:0000H         SYMBOL        _ICE_DUMMY_
+  D:0080H         PUBLIC        P0
+  D:0090H         PUBLIC        P1
+  D:00B0H         PUBLIC        P3
+  I:0021H         PUBLIC        counter
+  B:00A8H.7       PUBLIC        EA
+  C:0383H         PUBLIC        Thread_M
+  C:0AB0H         PUBLIC        my_test
+  D:00A8H         PUBLIC        IE
+  C:0712H         PUBLIC        USART
+  C:0BBAH         PUBLIC        _delay
+  B:00A8H.4       PUBLIC        ES
+  D:00B8H         PUBLIC        IP
+  B:0098H.0       PUBLIC        RI
+  B:0098H.1       PUBLIC        TI
+  C:0B07H         PUBLIC        _ATTX_M1
+  C:0B54H         PUBLIC        _ATTX_M2
+  B:00B8H.4       PUBLIC        PS
+  C:001EH         PUBLIC        main
+  C:0BE3H         SYMBOL        _print_string
+  D:0099H         PUBLIC        SBUF
+  D:0087H         PUBLIC        PCON
+  D:0098H         PUBLIC        SCON
+  D:0089H         PUBLIC        TMOD
+  D:0088H         PUBLIC        TCON
+  C:0003H         PUBLIC        init
+  B:0020H.0       PUBLIC        trans_flg
+  D:008DH         PUBLIC        TH1
+  B:0098H.7       PUBLIC        SM0
+  B:0098H.6       PUBLIC        SM1
+  C:0A58H         PUBLIC        usart_test
+  C:0C20H         PUBLIC        user_task
+  B:0088H.6       PUBLIC        TR1
+  C:0C14H         PUBLIC        _put_char
+BL51 BANKED LINKER/LOCATER V6.22                                                      08/18/2017  14:28:25  PAGE 4
+
+
+  C:05F3H         PUBLIC        command
+  B:0098H.4       PUBLIC        REN
+  D:00C8H         PUBLIC        T2CON
+  C:0602H         PUBLIC        Wifi_Reset
+  D:00D0H         PUBLIC        PSW
+  I:0022H         PUBLIC        COMMAND_FLAG
+  I:0023H         PUBLIC        buffer
+  -------         PROC          INIT
+  C:0003H         LINE#         49
+  C:0003H         LINE#         50
+  C:0003H         LINE#         51
+  C:0006H         LINE#         52
+  C:0009H         LINE#         53
+  C:000CH         LINE#         54
+  C:000FH         LINE#         55
+  C:0011H         LINE#         56
+  C:0013H         LINE#         57
+  C:0015H         LINE#         58
+  C:0017H         LINE#         59
+  C:0019H         LINE#         60
+  C:001BH         LINE#         61
+  C:001DH         LINE#         62
+  -------         ENDPROC       INIT
+  C:0BB6H         SYMBOL        L?0069
+  -------         PROC          L?0068
+  -------         ENDPROC       L?0068
+  C:0BB6H         SYMBOL        L?0069
+  -------         PROC          _DELAY
+  D:0006H         SYMBOL        xms
+  -------         DO            
+  D:0004H         SYMBOL        j
+  -------         ENDDO         
+  C:0BBAH         LINE#         64
+  C:0BBAH         LINE#         65
+  C:0BBAH         LINE#         67
+  C:0BC3H         LINE#         68
+  C:0BD7H         LINE#         69
+  -------         ENDPROC       _DELAY
+  -------         PROC          _PUT_CHAR
+  D:0007H         SYMBOL        chr
+  C:0C14H         LINE#         71
+  C:0C14H         LINE#         72
+  C:0C14H         LINE#         73
+  C:0C16H         LINE#         75
+  C:0C18H         LINE#         76
+  C:0C1BH         LINE#         77
+  C:0C1DH         LINE#         79
+  C:0C1FH         LINE#         80
+  -------         ENDPROC       _PUT_CHAR
+  C:0BDAH         SYMBOL        L?0071
+  C:0BDDH         SYMBOL        L?0072
+  -------         PROC          L?0070
+  -------         ENDPROC       L?0070
+  C:0BDAH         SYMBOL        L?0071
+  C:0BDDH         SYMBOL        L?0072
+  -------         PROC          _PRINT_STRING
+  D:0001H         SYMBOL        str
+BL51 BANKED LINKER/LOCATER V6.22                                                      08/18/2017  14:28:25  PAGE 5
+
+
+  C:0BE3H         LINE#         82
+  C:0BE3H         LINE#         83
+  C:0BE3H         LINE#         84
+  C:0BE9H         LINE#         86
+  C:0BECH         LINE#         87
+  C:0BF3H         LINE#         88
+  C:0BF5H         LINE#         89
+  C:0BFAH         LINE#         90
+  -------         ENDPROC       _PRINT_STRING
+  -------         PROC          USART
+  -------         DO            
+  D:0008H         SYMBOL        loop
+  -------         ENDDO         
+  C:0712H         LINE#         93
+  C:072FH         LINE#         98
+  C:0735H         LINE#         99
+  C:0735H         LINE#         100
+  C:0737H         LINE#         102
+  C:073DH         LINE#         103
+  C:073FH         LINE#         104
+  C:0765H         LINE#         105
+  C:0767H         LINE#         106
+  C:076BH         LINE#         107
+  C:076DH         LINE#         108
+  C:0776H         LINE#         109
+  C:0776H         LINE#         113
+  C:077CH         LINE#         114
+  C:0781H         LINE#         116
+  C:0781H         LINE#         117
+  C:0784H         LINE#         118
+  C:07ABH         LINE#         120
+  C:07BAH         LINE#         121
+  C:07BAH         LINE#         122
+  C:07C3H         LINE#         123
+  C:07CDH         LINE#         124
+  C:07D3H         LINE#         125
+  C:07D3H         LINE#         126
+  -------         ENDPROC       USART
+  -------         PROC          _ATTX_M1
+  D:0009H         SYMBOL        command
+  D:000CH         SYMBOL        rec
+  D:000FH         SYMBOL        wait_time
+  D:0011H         SYMBOL        rep
+  -------         DO            
+  D:0012H         SYMBOL        time_point
+  -------         ENDDO         
+  C:0B07H         LINE#         137
+  C:0B0DH         LINE#         138
+  C:0B0DH         LINE#         139
+  C:0B10H         LINE#         141
+  C:0B13H         LINE#         142
+  C:0B25H         LINE#         144
+  C:0B2EH         LINE#         145
+  C:0B35H         LINE#         146
+  C:0B37H         LINE#         147
+  C:0B40H         LINE#         148
+  C:0B40H         LINE#         149
+BL51 BANKED LINKER/LOCATER V6.22                                                      08/18/2017  14:28:25  PAGE 6
+
+
+  C:0B4FH         LINE#         150
+  C:0B52H         LINE#         151
+  C:0B53H         LINE#         152
+  -------         ENDPROC       _ATTX_M1
+  -------         PROC          _ATTX_M2
+  D:0001H         SYMBOL        command
+  D:000EH         SYMBOL        rec
+  D:0011H         SYMBOL        over_time
+  -------         DO            
+  D:0013H         SYMBOL        time_point
+  -------         ENDDO         
+  C:0B54H         LINE#         161
+  C:0B54H         LINE#         162
+  C:0B54H         LINE#         164
+  C:0B57H         LINE#         166
+  C:0B5AH         LINE#         167
+  C:0B5DH         LINE#         168
+  C:0B6FH         LINE#         170
+  C:0B76H         LINE#         171
+  C:0B8BH         LINE#         172
+  C:0B8BH         LINE#         173
+  C:0B9AH         LINE#         174
+  C:0B9DH         LINE#         175
+  C:0B9EH         LINE#         176
+  -------         ENDPROC       _ATTX_M2
+  -------         PROC          USART_TEST
+  -------         DO            
+  D:001AH         SYMBOL        p
+  -------         ENDDO         
+  C:0A58H         LINE#         181
+  C:0A58H         LINE#         182
+  C:0A58H         LINE#         184
+  C:0A5BH         LINE#         185
+  C:0A5BH         LINE#         187
+  C:0A64H         LINE#         188
+  C:0A67H         LINE#         189
+  C:0A7EH         LINE#         190
+  C:0A96H         LINE#         191
+  C:0A96H         LINE#         192
+  C:0A99H         LINE#         193
+  C:0A9DH         LINE#         194
+  C:0AA0H         LINE#         195
+  C:0AA4H         LINE#         196
+  C:0AA7H         LINE#         197
+  C:0AAEH         LINE#         198
+  -------         ENDPROC       USART_TEST
+  -------         PROC          MY_TEST
+  C:0AB0H         LINE#         204
+  C:0AB0H         LINE#         205
+  C:0AB0H         LINE#         207
+  C:0AB3H         LINE#         213
+  C:0ACEH         LINE#         214
+  C:0AE9H         LINE#         215
+  C:0B04H         LINE#         216
+  -------         ENDPROC       MY_TEST
+  -------         PROC          WIFI_RESET
+  -------         DO            
+BL51 BANKED LINKER/LOCATER V6.22                                                      08/18/2017  14:28:25  PAGE 7
+
+
+  C:0602H         SYMBOL        origin
+  -------         ENDDO         
+  C:0602H         LINE#         222
+  C:0602H         LINE#         223
+  C:0602H         LINE#         224
+  C:0602H         LINE#         225
+  C:0605H         LINE#         226
+  C:060CH         LINE#         227
+  C:0615H         LINE#         228
+  C:0618H         LINE#         229
+  C:061BH         LINE#         230
+  C:0622H         LINE#         231
+  C:063CH         LINE#         232
+  C:063FH         LINE#         233
+  C:065CH         LINE#         234
+  C:065FH         LINE#         235
+  C:067CH         LINE#         236
+  C:067FH         LINE#         237
+  C:069FH         LINE#         238
+  C:06A2H         LINE#         239
+  C:06C2H         LINE#         240
+  C:06C5H         LINE#         241
+  C:06E5H         LINE#         242
+  C:06E8H         LINE#         243
+  C:0708H         LINE#         244
+  C:070BH         LINE#         245
+  -------         ENDPROC       WIFI_RESET
+  -------         PROC          THREAD_M
+  -------         DO            
+  D:0000H         SYMBOL        p
+  D:0009H         SYMBOL        error_count
+  D:000AH         SYMBOL        keep
+  -------         ENDDO         
+  C:0383H         LINE#         248
+  C:0383H         LINE#         249
+  C:0383H         LINE#         253
+  C:0386H         LINE#         254
+  C:038AH         LINE#         255
+  C:0397H         LINE#         256
+  C:03AAH         LINE#         257
+  C:03B1H         LINE#         258
+  C:03BAH         LINE#         260
+  C:03C3H         LINE#         261
+  C:03C3H         LINE#         262
+  C:03C3H         LINE#         263
+  C:03C6H         LINE#         264
+  C:03C6H         LINE#         265
+  C:03C6H         LINE#         266
+  C:03C9H         LINE#         267
+  C:03CCH         LINE#         269
+  C:03D1H         LINE#         270
+  C:03D8H         LINE#         271
+  C:03E7H         LINE#         272
+  C:03E7H         LINE#         274
+  C:03FAH         LINE#         275
+  C:0400H         LINE#         277
+  C:0402H         LINE#         278
+BL51 BANKED LINKER/LOCATER V6.22                                                      08/18/2017  14:28:25  PAGE 8
+
+
+  C:0411H         LINE#         279
+  C:0415H         LINE#         280
+  C:0415H         LINE#         281
+  C:0439H         LINE#         282
+  C:0457H         LINE#         284
+  C:046AH         LINE#         285
+  C:0480H         LINE#         287
+  C:0484H         LINE#         288
+  C:0493H         LINE#         289
+  C:0497H         LINE#         290
+  C:049DH         LINE#         291
+  C:049DH         LINE#         292
+  C:04A4H         LINE#         293
+  C:04A6H         LINE#         295
+  C:04B0H         LINE#         297
+  C:04CAH         LINE#         298
+  C:04CFH         LINE#         299
+  C:04D2H         LINE#         300
+  C:04D2H         LINE#         302
+  C:04D5H         LINE#         303
+  C:04D8H         LINE#         304
+  -------         ENDPROC       THREAD_M
+  -------         PROC          USER_TASK
+  C:0C20H         LINE#         307
+  C:0C20H         LINE#         308
+  C:0C20H         LINE#         309
+  C:0C23H         LINE#         311
+  C:0C26H         LINE#         312
+  -------         ENDPROC       USER_TASK
+  -------         PROC          MAIN
+  C:001EH         LINE#         316
+  C:001EH         LINE#         317
+  C:001EH         LINE#         318
+  -------         ENDPROC       MAIN
+  -------         ENDMOD        IOT1_LED
+
+  -------         MODULE        ?C?CLDPTR
+  C:0026H         PUBLIC        ?C?CLDPTR
+  -------         ENDMOD        ?C?CLDPTR
+
+  -------         MODULE        ?C?UIDIV
+  C:003FH         PUBLIC        ?C?UIDIV
+  -------         ENDMOD        ?C?UIDIV
+
+  -------         MODULE        ?C?STRCMP
+  C:0212H         PUBLIC        ?C?STRCMP
+  -------         ENDMOD        ?C?STRCMP
+
+  -------         MODULE        ?C?STRCPY
+  C:02FBH         PUBLIC        ?C?STRCPY
+  -------         ENDMOD        ?C?STRCPY
+
+  -------         MODULE        STRLEN
+  C:0BFFH         PUBLIC        _STRLEN
+  -------         ENDMOD        STRLEN
+
+  -------         MODULE        STRTOK
+BL51 BANKED LINKER/LOCATER V6.22                                                      08/18/2017  14:28:25  PAGE 9
+
+
+  D:000BH         PUBLIC        ?_strtok?BYTE
+  C:091AH         PUBLIC        _strtok
+  -------         ENDMOD        STRTOK
+
+  -------         MODULE        ?C?MEMSET
+  C:0318H         PUBLIC        ?C?MEMSET
+  -------         ENDMOD        ?C?MEMSET
+
+  -------         MODULE        ?C?CSTPTR
+  C:0344H         PUBLIC        ?C?CSTPTR
+  -------         ENDMOD        ?C?CSTPTR
+
+  -------         MODULE        STRSPN
+  D:0011H         PUBLIC        ?_strspn?BYTE
+  C:099AH         PUBLIC        _strspn
+  -------         ENDMOD        STRSPN
+
+  -------         MODULE        STRPBRK
+  D:0011H         PUBLIC        ?_strpbrk?BYTE
+  C:09FBH         PUBLIC        _strpbrk
+  -------         ENDMOD        STRPBRK
+
+  -------         MODULE        ?C?CLDOPTR
+  C:0356H         PUBLIC        ?C?CLDOPTR
+  -------         ENDMOD        ?C?CLDOPTR
+
+*** WARNING L16: UNCALLED SEGMENT, IGNORED FOR OVERLAY PROCESS
+    SEGMENT: ?PR?MY_TEST?IOT1_LED
+
+Program Size: data=185.1 xdata=0 code=3111
+LINK/LOCATE RUN COMPLETE.  1 WARNING(S),  0 ERROR(S)
